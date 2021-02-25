@@ -10,7 +10,7 @@ These steps assume you have already installed WSL and you have installed a Fedor
 
 **Note**: Throughout this tutorial, when you see a ![red computer](images/userinput.png) icon, it indicates a command that you'll need to enter in your terminal. 
 
---
+---
 
 ### Installation
 
