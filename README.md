@@ -2,13 +2,15 @@
 
 ![](images/podman-windows.png)
 
-### Credits
+### Credits and Notes
 This tutorial is based on an article authored by Andy Wong, see the full article [here](https://oldgitops.medium.com/setting-up-podman-on-wsl2-in-windows-10-be2991c2d443).
 
 These steps assume you have already installed WSL and you have installed a Fedora 33 instance.  Reference these articles if you need to install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) and [Fedora](https://dev.to/bowmanjd/install-fedora-on-windows-subsystem-for-linux-wsl-4b26).
 
 
 **Note**: Throughout this tutorial, when you see a ![red computer](images/userinput.png) icon, it indicates a command that you'll need to enter in your terminal. 
+
+--
 
 ### Installation
 
