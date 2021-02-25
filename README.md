@@ -5,7 +5,7 @@
 ### Credits
 This tutorial is based on an article authored by Andy Wong, see the full article [here](https://oldgitops.medium.com/setting-up-podman-on-wsl2-in-windows-10-be2991c2d443).
 
-*These steps assumes you have already installed WSL.  Reference [this article](https://docs.microsoft.com/en-us/windows/wsl/install-win10) if you need WSL installation instructions.*
+*These steps assume you have already installed WSL.  Reference [this article](https://docs.microsoft.com/en-us/windows/wsl/install-win10) if you need WSL installation instructions.*
 
 
 **Note**: Throughout this tutorial, when you see a ![red computer](images/userinput.png) icon, it indicates a command that you'll need to enter in your terminal. 
