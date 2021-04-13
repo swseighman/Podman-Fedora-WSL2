@@ -55,7 +55,7 @@ You'll now notice a second entry in the `/etc/subuid` and `/etc/subgids` files:
 ![red computer](images/userinput.png)
 
 ```
-$ cat /cat /etc/subgid<your-username>:100000:65536<your-username>:10000:65536$ cat /cat /etc/subuid<your-username>:100000:65536<your-username>:10000:65536
+$ cat /etc/subgid<your-username>:100000:65536<your-username>:10000:65536$ cat /etc/subuid<your-username>:100000:65536<your-username>:10000:65536
 ```
 
 ### Configuration Tasks
@@ -87,7 +87,7 @@ In the `[engine]` section, change *(and/or uncomment)*:
 
 `cgroup_manager = "systemd"`to:**`cgroup_manager = "cgroupfs"`**And change:
 `events_logger = "journald"`to:
-**`events_logger = "file`**
+**`events_logger = "file"`**
 
 To run run containers on privileged ports (like port 80), we'll need to edit `/etc/sysctl.conf` and add an entry.
 
