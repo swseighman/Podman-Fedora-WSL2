@@ -126,6 +126,9 @@ Next, let's test our `podman` installation:
 ```
 $ podman run -it -p 80:80 nginx
 ```
+
+To test, browse to: **http://172.28.143.196** *(from ip addr command above)*
+
 You may encounter a warning message when executing various podman commands, for example:
 
 ```
@@ -137,10 +140,6 @@ If so, execute the following command:
 $ sudo mkdir /sys/fs/cgroup/systemd && sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
 ```
 
-
-To test, browse to: **http://172.28.143.196** *(from ip addr command above)*
-
-```
 
 ### Learn more
 
