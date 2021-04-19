@@ -126,9 +126,21 @@ Next, let's test our `podman` installation:
 ```
 $ podman run -it -p 80:80 nginx
 ```
+You may encounter a warning message when executing various podman commands, for example:
+
+```
+$ podman imagesWARN[0000] Failed to detect the owner for the current cgroup: stat /sys/fs/cgroup/systemd: no such file or directory
+```
+If so, execute the following command:
+
+```
+$ sudo mkdir /sys/fs/cgroup/systemd && sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
+```
+
 
 To test, browse to: **http://172.28.143.196** *(from ip addr command above)*
 
+```
 
 ### Learn more
 
