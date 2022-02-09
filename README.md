@@ -1,4 +1,4 @@
-## Install `podman` on Fedora 33 in WSL2
+## Install `podman` on Fedora 35 in WSL2
 
 ![](images/podman-windows.png)
 
