@@ -31,13 +31,18 @@ $ sudo dnf reinstall shadow-utils
 
 ### Rootless Configuration
 
-Podman can also be used as non-root user. When `podman` runs in rootless mode, a user namespace is automatically created for the user, defined in `/etc/subuid` and `/etc/subgid`.  Containers created by a non-root user are not visible to other users and are not seen or managed by `podman` running as root.It is required to have multiple uids/gids set for an user. Make certain the user is present in the files `/etc/subuid` and `/etc/subgid`. 
+Podman can also be used as non-root user. When `podman` runs in rootless mode, a user namespace is automatically created for the user, defined in `/etc/subuid` and `/etc/subgid`.  Containers created by a non-root user are not visible to other users and are not seen or managed by `podman` running as root.
+
+It is required to have multiple uids/gids set for an user. Make certain the user is present in the files `/etc/subuid` and `/etc/subgid`. 
 
 ![red computer](images/userinput.png)
 
 ```
-$ cat /etc/subuid<your-username>:100000:65536
-$ cat /etc/subgid<your-username>:100000:65536
+$ cat /etc/subuid
+<your-username>:100000:65536
+
+$ cat /etc/subgid
+<your-username>:100000:65536
 ```
 
 Execute the following commands to add the necessary ranges to the files:
@@ -45,9 +50,15 @@ Execute the following commands to add the necessary ranges to the files:
 ![red computer](images/userinput.png)
 
 ```
-$ sudo usermod --add-subuids 10000-75535 <your-username>$ sudo usermod --add-subgids 10000-75535 <your-username>
+$ sudo usermod --add-subuids 10000-75535 <your-username>
+$ sudo usermod --add-subgids 10000-75535 <your-username>
 ```
-Or just add the content manually.```$ echo <your-username>:10000:65536 >> /etc/subuid$ echo <your-username>:10000:65536 >> /etc/subgid
+
+Or just add the content manually.
+
+```
+$ echo <your-username>:10000:65536 >> /etc/subuid
+$ echo <your-username>:10000:65536 >> /etc/subgid
 ```
 
 You'll now notice a second entry in the `/etc/subuid` and `/etc/subgids` files:
@@ -55,7 +66,13 @@ You'll now notice a second entry in the `/etc/subuid` and `/etc/subgids` files:
 ![red computer](images/userinput.png)
 
 ```
-$ cat /etc/subgid<your-username>:100000:65536<your-username>:10000:65536$ cat /etc/subuid<your-username>:100000:65536<your-username>:10000:65536
+$ cat /etc/subgid
+<your-username>:100000:65536
+<your-username>:10000:65536
+
+$ cat /etc/subuid
+<your-username>:100000:65536
+<your-username>:10000:65536
 ```
 
 ### Configuration Tasks
@@ -65,7 +82,15 @@ Without `systemd` (currently not *easily* supported in WSL2), the `$XDG_RUNTIME_
 ![red computer](images/userinput.png)
 
 ```
-if [[ -z "$XDG_RUNTIME_DIR" ]]; then  export XDG_RUNTIME_DIR=/run/user/$UID  if [[ ! -d "$XDG_RUNTIME_DIR" ]]; then    export XDG_RUNTIME_DIR=/tmp/$USER-runtime    if [[ ! -d "$XDG_RUNTIME_DIR" ]]; then      mkdir -m 0700 "$XDG_RUNTIME_DIR"    fi  fifi
+if [[ -z "$XDG_RUNTIME_DIR" ]]; then
+  export XDG_RUNTIME_DIR=/run/user/$UID
+  if [[ ! -d "$XDG_RUNTIME_DIR" ]]; then
+    export XDG_RUNTIME_DIR=/tmp/$USER-runtime
+    if [[ ! -d "$XDG_RUNTIME_DIR" ]]; then
+      mkdir -m 0700 "$XDG_RUNTIME_DIR"
+    fi
+  fi
+fi
 ```
 
 ![red computer](images/userinput.png)
@@ -85,9 +110,19 @@ $ sudo vi /etc/containers/containers.conf
 
 In the `[engine]` section, change *(and/or uncomment)*:
 
-`cgroup_manager = "systemd"`to:**`cgroup_manager = "cgroupfs"`**And change:
-`events_logger = "journald"`to:
-**`events_logger = "file"`**
+`cgroup_manager = "systemd"`
+
+to:
+
+**`cgroup_manager = "cgroupfs"`**
+
+And change:
+
+`events_logger = "journald"`
+
+to:
+
+**`events_logger = "file"`**
 
 To run run containers on privileged ports (like port 80), we'll need to edit `/etc/sysctl.conf` and add an entry.
 
@@ -98,15 +133,39 @@ $ sudo vim /etc/sysctl.conf
 ```
 
 Add the following line:
-```
+
+```
 net.ipv4.ip_unprivileged_port_start=0
 ```
 
 Apply the change:
 
 ![red computer](images/userinput.png)
-```$ sudo sysctl -p
+
 ```
+$ sudo sysctl -p
+```
+
+There may be additional commands you need to execute if you encounter errors.
+
+If you receive the following error:
+
+`WARN[0000] "/" is not a shared mount, this could cause issues or missing mounts with rootless containers`
+
+Execute the command:
+```
+$ sudo mount --make-rshared /
+```
+
+If you receive the following error:
+
+`Error: cannot setup namespace using newuidmap: exit status 1`
+
+Execute the command:
+```
+$ sudo dnf reinstall shadow-utils
+```
+
 
 In order to access your containers, you'll need to identify the IP address of your WSL2 instance, so execute the following command:
 
@@ -132,7 +191,8 @@ To test, browse to: **http://172.28.143.196** *(from ip addr command above)*
 You may encounter a warning message when executing various podman commands, for example:
 
 ```
-$ podman imagesWARN[0000] Failed to detect the owner for the current cgroup: stat /sys/fs/cgroup/systemd: no such file or directory
+$ podman images
+WARN[0000] Failed to detect the owner for the current cgroup: stat /sys/fs/cgroup/systemd: no such file or directory
 ```
 If so, execute the following command:
 
