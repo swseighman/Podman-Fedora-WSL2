@@ -152,6 +152,14 @@ If you receive the following error:
 
 `WARN[0000] "/" is not a shared mount, this could cause issues or missing mounts with rootless containers`
 
+Execute the commands:
+```
+$ sudo chmod 4755 /usr/bin/newgidmap
+$ sudo chmod 4755 /usr/bin/newuidmap
+```
+
+or
+
 Execute the command:
 ```
 $ sudo mount --make-rshared /
